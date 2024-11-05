@@ -10,7 +10,7 @@ pipeline {
     }
     
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
                 sh 'mvn --version'              // Check Maven version
                 sh 'docker --version'           // Check Docker version
@@ -23,6 +23,21 @@ pipeline {
                 echo "BUILD_URL - ${env.BUILD_URL}"  // Corrected usage of env variables
             }
         }
+		stage('Build'){
+			steps {
+				sh "mvn clean compile"
+			}
+		}
+		stage('Test'){
+			steps{
+				sh "mvn test"
+			}
+		}
+		stage('Integration Test'){
+			steps{
+				sh "mvn failsafe:integration-test failsafe:verify"
+			}
+		}
     }
 }
 				
